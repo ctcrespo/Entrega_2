@@ -1,0 +1,132 @@
+class Laberinto:
+    def _init_(self):
+        self.habitaciones = {}
+
+    def agregar_habitacion(self, numero, habitacion):
+        self.habitaciones[numero] = habitacion
+
+    def obtener_habitacion(self, numero):
+        return self.habitaciones[numero]
+        
+class Contenedor:
+    def agregar(self, componente):
+        pass
+    
+    def eliminar(self, componente):
+        pass
+    
+    def buscar_por_nombre(self, nombre):
+        pass
+    
+    def buscar_por_tipo(self, tipo):
+        pass
+    
+class Habitacion(Contenedor):
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.puertas = []
+        self.baules = []
+        
+    def agregar(self, puerta):
+        self.puertas.append(puerta)
+        
+    def agregar_baul(self, baul):
+        self.baules.append(baul)
+        
+    def eliminar(self, puerta):
+        self.puertas.remove(puerta)
+        
+    def eliminar_baul(self, baul):
+        self.baules.remove(baul)
+        
+    def buscar_por_nombre(self, nombre):
+        if self.nombre == nombre:
+            return self
+        for puerta in self.puertas:
+            habitacion = puerta.buscar_por_nombre(nombre)
+            if habitacion is not None:
+                return habitacion
+        return None
+    
+    def buscar_por_tipo(self, tipo):
+        if isinstance(self, tipo):
+            return [self]
+        resultados = []
+        for puerta in self.puertas:
+            resultados.extend(puerta.buscar_por_tipo(tipo))
+        return resultados
+        
+class Puerta(Contenedor):
+    def __init__(self, habitacion1, habitacion2, orientacion):
+        self.habitacion1 = habitacion1
+        self.habitacion2 = habitacion2
+        self.orientacion = orientacion
+        
+    def agregar(self, contenedor):
+        pass
+    
+    def eliminar(self, contenedor):
+        pass
+    
+    def buscar_por_nombre(self, nombre):
+        habitacion = self.habitacion1.buscar_por_nombre(nombre)
+        if habitacion is not None:
+            return habitacion
+        habitacion = self.habitacion2.buscar_por_nombre(nombre)
+        if habitacion is not None:
+            return habitacion
+        return None
+    
+    def buscar_por_tipo(self, tipo):
+        resultados = []
+        resultados.extend(self.habitacion1.buscar_por_tipo(tipo))
+        resultados.extend(self.habitacion2.buscar_por_tipo(tipo))
+        return resultados
+    
+class Baul(Contenedor):
+    def __init__(self, nombre, contiene_bomba):
+        self.nombre = nombre
+        self.contiene_bomba = contiene_bomba
+        
+    def agregar(self, contenedor):
+        pass
+    
+    def eliminar(self, contenedor):
+        pass
+    
+    def buscar_por_nombre(self, nombre):
+        if self.nombre == nombre:
+            return self
+        return None
+    
+    def buscar_por_tipo(self, tipo):
+        if isinstance(self, tipo):
+            return [self]
+        return []
+    
+class Decorator(Contenedor):
+    def __init__(self, componente):
+        self.componente = componente
+        
+    def agregar(self, componente):
+        self.componente.agregar(componente)
+        
+    def eliminar(self, componente):
+        self.componente.eliminar(componente)
+        
+    def buscar_por_nombre(self, nombre):
+        return self.componente.buscar_por_nombre(nombre)
+    
+    def buscar_por_tipo(self, tipo):
+        return self.componente.buscar_por_tipo(tipo)
+    
+class Bomba(Decorator):
+    def __init__(self, componente):
+        super().__init__(componente)
+        self.contiene_bomba = True
+    
+class SinBomba(Decorator):
+    def __init__(self, componente):
+        super().__init__(component
+
+   
